@@ -1,0 +1,148 @@
+PRAGMA foreign_keys = ON;
+
+-- D I M E N S I E T A B E L L E N
+
+CREATE TABLE Dim_Datum (
+    datum_sk      INTEGER PRIMARY KEY AUTOINCREMENT,
+    datum         DATE NOT NULL UNIQUE,
+    year          INTEGER NOT NULL,
+    month         INTEGER NOT NULL,
+    day           INTEGER NOT NULL
+);
+
+CREATE TABLE Dim_Fiets (
+    fiets_sk          INTEGER PRIMARY KEY AUTOINCREMENT,
+    fietsnr           INTEGER NOT NULL,                -- business key uit SDM
+    soort             TEXT,
+    merk              TEXT,
+    type              TEXT,
+    kleur             TEXT,
+    fabrikantnr       INTEGER,                         -- business key fabrikant uit SDM
+    fabrikantnaam     TEXT,
+    fabrikantadres    TEXT,
+    fabrikantplaats   TEXT,
+    begintijd         DATETIME NOT NULL,
+    eindtijd          DATETIME,
+    CHECK (eindtijd IS NULL OR eindtijd >= begintijd)
+);
+
+CREATE TABLE Dim_Klant (
+    klant_sk       INTEGER PRIMARY KEY AUTOINCREMENT,
+    klantnr        INTEGER NOT NULL,                   -- business key uit SDM
+    naam           TEXT,
+    adres          TEXT,
+    woonplaats     TEXT,
+    geslacht       TEXT,
+    geboortedatum  DATE,
+    begintijd      DATETIME NOT NULL,
+    eindtijd       DATETIME,
+    CHECK (eindtijd IS NULL OR eindtijd >= begintijd)
+);
+
+CREATE TABLE Dim_Accessoire (
+    accessoire_sk       INTEGER PRIMARY KEY AUTOINCREMENT,
+    accessoirenr        INTEGER NOT NULL,              -- business key uit SDM
+    naam                TEXT,
+    soort               TEXT,
+    leveranciernr       INTEGER,                       -- business key leverancier uit SDM
+    leveranciernaam     TEXT,
+    leverancieradres    TEXT,
+    leverancierplaats   TEXT,
+    begintijd           DATETIME NOT NULL,
+    eindtijd            DATETIME,
+    CHECK (eindtijd IS NULL OR eindtijd >= begintijd)
+);
+
+CREATE TABLE Dim_Monteur (
+    monteur_sk          INTEGER PRIMARY KEY AUTOINCREMENT,
+    monteurnr           INTEGER NOT NULL,              -- business key uit SDM
+    naam                TEXT,
+    woonplaats          TEXT,
+    uurloon             REAL,
+    filiaalnr           INTEGER,                       -- business key filiaal uit SDM
+    filiaalnaam         TEXT,
+    filiaaladres        TEXT,
+    filiaalprovincie    TEXT,
+    begintijd           DATETIME NOT NULL,
+    eindtijd            DATETIME,
+    CHECK (eindtijd IS NULL OR eindtijd >= begintijd)
+);
+
+-- U N I E K E   A C T U E L E   R I J   P E R   B K
+-- (SCD Type 2: per business key mag maar één actuele rij
+--  bestaan, dus één rij met eindtijd IS NULL)
+
+CREATE UNIQUE INDEX ux_dim_fiets_huidig
+    ON Dim_Fiets (fietsnr)
+    WHERE eindtijd IS NULL;
+
+CREATE UNIQUE INDEX ux_dim_klant_huidig
+    ON Dim_Klant (klantnr)
+    WHERE eindtijd IS NULL;
+
+CREATE UNIQUE INDEX ux_dim_accessoire_huidig
+    ON Dim_Accessoire (accessoirenr)
+    WHERE eindtijd IS NULL;
+
+CREATE UNIQUE INDEX ux_dim_monteur_huidig
+    ON Dim_Monteur (monteurnr)
+    WHERE eindtijd IS NULL;
+
+-- F E I T T A B E L L E N
+
+CREATE TABLE Fct_Verkoop (
+    verkoopnr       INTEGER PRIMARY KEY,               -- bron-feitnummer
+    datum_sk        INTEGER NOT NULL,
+    aantal          INTEGER NOT NULL,
+    totaalprijs     REAL NOT NULL,
+    standaardprijs  REAL,
+    klant_sk        INTEGER NOT NULL,
+    fiets_sk        INTEGER,
+    accessoire_sk   INTEGER,
+    monteur_sk      INTEGER NOT NULL,
+
+    FOREIGN KEY (datum_sk)      REFERENCES Dim_Datum(datum_sk),
+    FOREIGN KEY (klant_sk)      REFERENCES Dim_Klant(klant_sk),
+    FOREIGN KEY (fiets_sk)      REFERENCES Dim_Fiets(fiets_sk),
+    FOREIGN KEY (accessoire_sk) REFERENCES Dim_Accessoire(accessoire_sk),
+    FOREIGN KEY (monteur_sk)    REFERENCES Dim_Monteur(monteur_sk),
+
+    CHECK (
+        (fiets_sk IS NOT NULL AND accessoire_sk IS NULL)
+        OR
+        (fiets_sk IS NULL AND accessoire_sk IS NOT NULL)
+    )
+);
+
+CREATE TABLE Fct_Onderhoud (
+    onderhoudnr     INTEGER PRIMARY KEY,               -- bron-feitnummer
+    datum_sk        INTEGER NOT NULL,
+    starttijd       TIME NOT NULL,
+    eindtijd        TIME NOT NULL,
+    fiets_sk        INTEGER NOT NULL,
+    monteur_sk      INTEGER NOT NULL,
+
+    FOREIGN KEY (datum_sk)   REFERENCES Dim_Datum(datum_sk),
+    FOREIGN KEY (fiets_sk)   REFERENCES Dim_Fiets(fiets_sk),
+    FOREIGN KEY (monteur_sk) REFERENCES Dim_Monteur(monteur_sk)
+);
+
+CREATE TABLE Feit_Inkoop (
+    inkoopnr        INTEGER PRIMARY KEY,               -- bron-feitnummer
+    datum_sk        INTEGER NOT NULL,
+    aantal          INTEGER NOT NULL,
+    totaalprijs     REAL NOT NULL,
+    inkoopprijs     REAL NOT NULL,
+    fiets_sk        INTEGER,
+    accessoire_sk   INTEGER,
+
+    FOREIGN KEY (datum_sk)      REFERENCES Dim_Datum(datum_sk),
+    FOREIGN KEY (fiets_sk)      REFERENCES Dim_Fiets(fiets_sk),
+    FOREIGN KEY (accessoire_sk) REFERENCES Dim_Accessoire(accessoire_sk),
+
+    CHECK (
+        (fiets_sk IS NOT NULL AND accessoire_sk IS NULL)
+        OR
+        (fiets_sk IS NULL AND accessoire_sk IS NOT NULL)
+    )
+);
