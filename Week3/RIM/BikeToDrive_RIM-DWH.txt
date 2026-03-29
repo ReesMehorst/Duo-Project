@@ -127,7 +127,7 @@ CREATE TABLE Fct_Onderhoud (
     FOREIGN KEY (monteur_sk) REFERENCES Dim_Monteur(monteur_sk)
 );
 
-CREATE TABLE Feit_Inkoop (
+CREATE TABLE Fct_Inkoop (
     inkoopnr        INTEGER PRIMARY KEY,               -- bron-feitnummer
     datum_sk        INTEGER NOT NULL,
     aantal          INTEGER NOT NULL,
