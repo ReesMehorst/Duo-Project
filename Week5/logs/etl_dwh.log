@@ -1,0 +1,46 @@
+2026-04-19 12:36:04.557 | INFO     | __main__:<module>:12 - SDM en DWH connecties succesvol.
+2026-04-19 12:36:04.584 | INFO     | __main__:<module>:15 - Start ETL Dim_Klant (SCD Type 2 met business key klantnr + source_id)
+2026-04-19 12:36:04.607 | INFO     | __main__:<module>:51 - Aantal klant-rijen uit accessoirebron: 20
+2026-04-19 12:36:04.609 | INFO     | __main__:<module>:52 - Aantal klant-rijen uit fietsbron: 25
+2026-04-19 12:36:04.613 | INFO     | __main__:<module>:67 - Aantal records in samengestelde bronset: 45
+2026-04-19 12:36:04.630 | INFO     | __main__:<module>:102 - Aantal actuele klanten in DWH: 45
+2026-04-19 12:36:04.671 | INFO     | __main__:<module>:145 - Aantal nieuwe klanten: 0
+2026-04-19 12:36:04.672 | INFO     | __main__:<module>:146 - Aantal gewijzigde klanten: 1
+2026-04-19 12:36:04.673 | INFO     | __main__:<module>:147 - Aantal ongewijzigde klanten: 44
+2026-04-19 12:36:04.674 | INFO     | __main__:<module>:162 - Start ETL voor Dim_Klant (SCD Type 2)
+2026-04-19 12:36:04.732 | INFO     | __main__:<module>:250 - Dim_Klant klaar | inserted=0, updated_scd2=1, unchanged=44
+2026-04-19 12:36:04.762 | INFO     | __main__:<module>:49 - Aantal accessoire-rijen uit verkoopbron: 10
+2026-04-19 12:36:04.763 | INFO     | __main__:<module>:50 - Aantal accessoire-rijen uit inkoopbron: 13
+2026-04-19 12:36:04.782 | INFO     | __main__:<module>:90 - Aantal unieke accessoires in source: 13
+2026-04-19 12:36:04.786 | INFO     | __main__:<module>:112 - Aantal actuele accessoires in DWH: 13
+2026-04-19 12:36:04.796 | INFO     | __main__:<module>:148 - Aantal nieuwe accessoires: 0
+2026-04-19 12:36:04.797 | INFO     | __main__:<module>:149 - Aantal gewijzigde accessoires: 0
+2026-04-19 12:36:04.799 | INFO     | __main__:<module>:150 - Aantal ongewijzigde accessoires: 13
+2026-04-19 12:36:04.800 | INFO     | __main__:<module>:163 - Start ETL voor Dim_Accessoire (SCD Type 1)
+2026-04-19 12:36:04.814 | INFO     | __main__:<module>:227 - Dim_Accessoire klaar | inserted=0, updated_scd1=0, unchanged=13
+2026-04-19 12:36:04.843 | INFO     | __main__:<module>:40 - Aantal datum-rijen uit Fiets_Verkoop: 150
+2026-04-19 12:36:04.845 | INFO     | __main__:<module>:41 - Aantal datum-rijen uit Accessoire_Verkoop: 100
+2026-04-19 12:36:04.846 | INFO     | __main__:<module>:42 - Aantal datum-rijen uit Onderhoud: 50
+2026-04-19 12:36:04.849 | INFO     | __main__:<module>:55 - Aantal unieke datums in source: 196
+2026-04-19 12:36:04.864 | INFO     | __main__:<module>:82 - Aantal datums in DWH: 201
+2026-04-19 12:36:04.922 | INFO     | __main__:<module>:98 - Aantal nieuwe datums: 0
+2026-04-19 12:36:04.923 | INFO     | __main__:<module>:99 - Aantal bestaande datums: 196
+2026-04-19 12:36:04.923 | INFO     | __main__:<module>:105 - Start ETL voor Dim_Datum
+2026-04-19 12:36:04.979 | INFO     | __main__:<module>:130 - Dim_Datum klaar | inserted=0
+2026-04-19 12:36:04.999 | INFO     | __main__:<module>:1 - Start ETL Dim_Fiets (SCD Type 2 met business key fietsnr + source_id)
+2026-04-19 12:36:05.006 | INFO     | __main__:<module>:42 - Aantal bronrecords: 180
+2026-04-19 12:36:05.010 | INFO     | __main__:<module>:65 - Aantal actuele fietsen in DWH: 180
+2026-04-19 12:36:05.143 | INFO     | __main__:<module>:105 - Preview | new=0, changed=0, unchanged=180
+2026-04-19 12:36:05.260 | SUCCESS  | __main__:<module>:197 - Dim_Fiets klaar | inserted=0, updated=0, unchanged=180
+2026-04-19 12:36:05.282 | INFO     | __main__:<module>:1 - Ophalen Monteur uit SDM
+2026-04-19 12:36:05.292 | INFO     | __main__:<module>:64 - Data opgehaald uit SDM en DWH.
+2026-04-19 12:36:05.294 | INFO     | __main__:<module>:178 - Monteur dimensie geupdate in DWH.
+2026-04-19 12:36:05.319 | INFO     | __main__:<module>:1 - Ophalen Onderhoud uit SDM
+2026-04-19 12:36:05.323 | INFO     | __main__:<module>:88 - Start ETL Fct_Onderhoud
+2026-04-19 12:36:05.324 | SUCCESS  | __main__:<module>:125 - Fct_Onderhoud load klaar
+2026-04-19 12:36:05.345 | INFO     | __main__:<module>:1 - Ophalen Verkoop uit SDM
+2026-04-19 12:36:05.351 | INFO     | __main__:<module>:83 - Start ETL Fct_Verkoop
+2026-04-19 12:36:05.368 | INFO     | __main__:<module>:168 - Fct_Verkoop klaar inserted=10, skipped=240, errors=0
+2026-04-19 12:36:05.386 | INFO     | __main__:<module>:1 - Ophalen Inkoop uit SDM
+2026-04-19 12:36:05.389 | INFO     | __main__:<module>:56 - Start ETL Fct_Inkoop
+2026-04-19 12:36:05.405 | SUCCESS  | __main__:<module>:108 - Fct_Inkoop load klaar
